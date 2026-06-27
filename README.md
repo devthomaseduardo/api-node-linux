@@ -1,199 +1,264 @@
-# API Node Linux
+Show. Próximo passo: **revisar o README.md em português**, com as rotas reais que já criamos.
 
-API REST criada com Node.js, TypeScript e Fastify para prática de back-end em ambiente Linux.
+No terminal:
 
-O projeto faz parte de um laboratório de evolução full-stack, com foco em API, organização de ambiente, execução local, validação por terminal e preparação para banco de dados PostgreSQL.
+```bash
+code .
+```
 
-## Objetivo
+Abre o arquivo:
 
-Construir uma API simples, funcional e documentada, rodando localmente em Linux, com uma rota de verificação de saúde da aplicação.
+```text
+README.md
+```
 
-Esta primeira etapa valida:
+Substitui o conteúdo por este:
 
-- estrutura inicial do projeto
-- servidor HTTP com Fastify
-- TypeScript configurado
-- variáveis de ambiente
-- rota `/health`
-- execução local na porta `3333`
-- teste via `curl`
+````md
+# API Node.js em Servidor Linux
+
+API REST criada com Node.js, TypeScript, Fastify, Prisma e PostgreSQL.
+
+O objetivo deste projeto é praticar backend real com banco de dados, rotas HTTP, persistência e preparação para execução em ambiente Linux.
 
 ## Stack utilizada
 
 - Node.js
 - TypeScript
 - Fastify
-- TSX
-- Dotenv
+- Prisma
+- PostgreSQL
+- dotenv
 - CORS
-- Linux
-- Git
 
-## Estrutura inicial
+## Funcionalidades implementadas
 
-```text
-api-node-linux/
-├── src/
-│   └── server.ts
-├── package.json
-├── tsconfig.json
-├── .env
-└── README.md
-````
+- Health check da API
+- Cadastro de clientes
+- Listagem de clientes
+- Tratamento de e-mail duplicado
+- Cadastro de projetos vinculados a clientes
+- Listagem de projetos com dados do cliente
+- Atualização de status do projeto
 
-## Como rodar o projeto
-
-Instale as dependências:
-
-```bash
-npm install
-```
-
-Rode a API em modo desenvolvimento:
-
-```bash
-npm run dev
-```
-
-A API será iniciada em:
-
-```text
-http://localhost:3333
-```
-
-## Rota disponível
+## Rotas da API
 
 ### Health check
 
 ```http
 GET /health
-```
+````
 
-Teste no terminal:
+Exemplo:
 
 ```bash
-curl localhost:3333/health
+curl http://localhost:3333/health
 ```
 
-Resposta esperada:
+### Listar clientes
 
-```json
-{
-  "status": "ok",
-  "service": "api-node-linux",
-  "timestamp": "2026-06-27T14:32:37.953Z"
-}
+```http
+GET /clients
 ```
 
-## Scripts
+Exemplo:
 
-```json
-{
-  "dev": "tsx watch src/server.ts",
-  "build": "tsc",
-  "start": "node dist/server.js"
-}
+```bash
+curl http://localhost:3333/clients
 ```
 
-## Variáveis de ambiente
+### Criar cliente
+
+```http
+POST /clients
+```
+
+Exemplo:
+
+```bash
+curl -X POST http://localhost:3333/clients \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Cliente Teste","email":"cliente.teste@example.com","phone":"11999990000"}'
+```
+
+### Listar projetos
+
+```http
+GET /projects
+```
+
+Exemplo:
+
+```bash
+curl http://localhost:3333/projects
+```
+
+### Criar projeto
+
+```http
+POST /projects
+```
+
+Exemplo:
+
+```bash
+curl -X POST http://localhost:3333/projects \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Projeto API Node Linux","clientId":"ID_DO_CLIENTE"}'
+```
+
+### Atualizar status do projeto
+
+```http
+PATCH /projects/:id/status
+```
+
+Exemplo:
+
+```bash
+curl -X PATCH http://localhost:3333/projects/ID_DO_PROJETO/status \
+  -H "Content-Type: application/json" \
+  -d '{"status":"completed"}'
+```
+
+## Como rodar o projeto
+
+### 1. Instalar dependências
+
+```bash
+npm install
+```
+
+### 2. Configurar variáveis de ambiente
 
 Crie um arquivo `.env` na raiz do projeto:
 
 ```env
 PORT=3333
 HOST=0.0.0.0
+DATABASE_URL="postgresql://usuario:senha@localhost:5432/nome_do_banco?schema=public"
 ```
 
-## Status do projeto
+Não versionar o arquivo `.env`.
 
-Etapa atual concluída:
+### 3. Rodar migrations
+
+```bash
+npx prisma migrate dev
+```
+
+### 4. Gerar Prisma Client
+
+```bash
+npx prisma generate
+```
+
+### 5. Rodar em desenvolvimento
+
+```bash
+npm run dev
+```
+
+## Banco de dados
+
+Modelos criados:
+
+* Client
+* Project
+
+Relação:
 
 ```text
-API base criada e validada com sucesso.
+Um cliente pode ter vários projetos.
+Um projeto pertence a um cliente.
 ```
-
-O servidor subiu corretamente e a rota `/health` respondeu via terminal usando `curl`.
-
-## Próximos passos
-
-* configurar PostgreSQL
-* criar schema inicial
-* conectar a API ao banco
-* criar rotas de clientes
-* criar rotas de projetos
-* rodar a API em background no Linux
-* documentar execução e evidências
-
-## Autor
-
-Thomas Eduardo
-Full-Stack Developer
-
-Portfólio: thomaseduardo.online
-GitHub: github.com/devthomaseduardo
-LinkedIn: linkedin.com/in/devthomaseduardo
 
 ## Histórico de implementação
 
 ### 1. Base inicial da API
 
-O projeto foi iniciado com Node.js, TypeScript e Fastify.
+Foi criada a estrutura inicial do projeto com Node.js, TypeScript e Fastify.
 
-Rotas criadas:
+Rota criada:
 
-- GET /health
+```text
+GET /health
+```
 
-Objetivo da etapa:
-
-Validar que a API estava rodando corretamente na porta 3333.
-
----
-
-### 2. Configuração do banco de dados
+### 2. Configuração do banco
 
 Foi configurado o PostgreSQL com Prisma.
 
 Itens criados:
 
-- Banco de dados da aplicação
-- Usuário específico para a API
-- Schema Prisma
-- Migration inicial
-- Tabelas Client e Project
-
-Objetivo da etapa:
-
-Garantir persistência real dos dados no banco.
-
----
+```text
+Client
+Project
+_prisma_migrations
+```
 
 ### 3. Rotas de clientes
 
-Foram criadas as rotas de clientes usando Prisma.
+Foram criadas rotas para listar e cadastrar clientes.
 
 Rotas criadas:
 
-- GET /clients
-- POST /clients
+```text
+GET /clients
+POST /clients
+```
 
-Também foi adicionado tratamento para e-mail duplicado.
-
-Objetivo da etapa:
-
-Criar e listar clientes salvos no PostgreSQL.
-
----
+Também foi configurado tratamento para e-mail duplicado.
 
 ### 4. Rotas de projetos
 
-Foram criadas as rotas de projetos usando a relação entre Client e Project.
+Foram criadas rotas para listar projetos, criar projetos e atualizar status.
 
 Rotas criadas:
 
-- GET /projects
-- POST /projects
-- PATCH /projects/:id/status
+```text
+GET /projects
+POST /projects
+PATCH /projects/:id/status
+```
 
-Objetivo da etapa:
+## Padrão de commits
 
-Criar projetos vinculados a clientes e atualizar o status do projeto.
+Este projeto usa commits com tipo em inglês e descrição em português.
+
+Exemplos:
+
+```bash
+git commit -m "feat: adicionar rotas de clientes"
+git commit -m "feat: adicionar rotas de projetos"
+git commit -m "fix: corrigir erro de email duplicado"
+git commit -m "docs: atualizar README com rotas da API"
+```
+
+Tipos usados:
+
+```text
+feat: nova funcionalidade
+fix: correção de erro
+docs: documentação
+refactor: reorganização de código
+chore: configuração ou dependências
+test: testes
+```
+
+## Status atual
+
+Projeto em desenvolvimento.
+
+Etapas concluídas:
+
+* API base criada
+* Banco configurado
+* Prisma configurado
+* Rotas de clientes criadas
+* Rotas de projetos criadas
+* README documentado
+
+Próximo passo:
+
+Preparar execução em servidor Linux.
