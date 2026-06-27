@@ -133,3 +133,67 @@ Portfólio: thomaseduardo.online
 GitHub: github.com/devthomaseduardo
 LinkedIn: linkedin.com/in/devthomaseduardo
 
+## Histórico de implementação
+
+### 1. Base inicial da API
+
+O projeto foi iniciado com Node.js, TypeScript e Fastify.
+
+Rotas criadas:
+
+- GET /health
+
+Objetivo da etapa:
+
+Validar que a API estava rodando corretamente na porta 3333.
+
+---
+
+### 2. Configuração do banco de dados
+
+Foi configurado o PostgreSQL com Prisma.
+
+Itens criados:
+
+- Banco de dados da aplicação
+- Usuário específico para a API
+- Schema Prisma
+- Migration inicial
+- Tabelas Client e Project
+
+Objetivo da etapa:
+
+Garantir persistência real dos dados no banco.
+
+---
+
+### 3. Rotas de clientes
+
+Foram criadas as rotas de clientes usando Prisma.
+
+Rotas criadas:
+
+- GET /clients
+- POST /clients
+
+Também foi adicionado tratamento para e-mail duplicado.
+
+Objetivo da etapa:
+
+Criar e listar clientes salvos no PostgreSQL.
+
+---
+
+### 4. Rotas de projetos
+
+Foram criadas as rotas de projetos usando a relação entre Client e Project.
+
+Rotas criadas:
+
+- GET /projects
+- POST /projects
+- PATCH /projects/:id/status
+
+Objetivo da etapa:
+
+Criar projetos vinculados a clientes e atualizar o status do projeto.

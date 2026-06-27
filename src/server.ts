@@ -73,7 +73,116 @@ app.get("/clients", async () => {
 
   return clients;
 });
+app.get("/projects", async () => {
+  const projects = await prisma.project.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      client: true,
+    },
+  });
 
+  return projects;
+});
+
+app.post("/projects", async (request, reply) => {
+  const body = request.body as {
+    name?: string;
+    clientId?: string;
+    status?: string;
+  };
+
+  if (!body.name || !body.clientId) {
+    return reply.status(400).send({
+      error: "name and clientId are required",
+    });
+  }
+
+  try {
+    const project = await prisma.project.create({
+      data: {
+        name: body.name,
+        clientId: body.clientId,
+        status: body.status ?? "active",
+      },
+      include: {
+        client: true,
+      },
+    });
+
+    return reply.status(201).send(project);
+  } catch (error) {
+    const prismaError = error as {
+      code?: string;
+    };
+
+    if (prismaError.code === "P2003") {
+      return reply.status(400).send({
+        error: "client does not exist",
+      });
+    }
+
+    request.log.error(error);
+
+    return reply.status(500).send({
+      error: "internal server error",
+    });
+  }
+});
+
+app.patch("/projects/:id/status", async (request, reply) => {
+  const params = request.params as {
+    id: string;
+  };
+
+  const body = request.body as {
+    status?: string;
+  };
+
+  if (!body.status) {
+    return reply.status(400).send({
+      error: "status is required",
+    });
+  }
+
+  try {
+    const project = await prisma.project.update({
+      where: {
+        id: params.id,
+      },
+      data: {
+        status: body.status,
+      },
+      include: {
+        client: true,
+      },
+    });
+
+    return project;
+  } catch (error) {
+    const prismaError = error as {
+      code?: string;
+    };
+
+    if (prismaError.code === "P2025") {
+      return reply.status(404).send({
+        error: "project not found",
+      });
+    }
+
+    request.log.error(error);
+
+    return reply.status(500).send({
+      error: "internal server error",
+    });
+  }
+});
+
+
+
+
+    
 const port = Number(process.env.PORT ?? 3333);
 const host = process.env.HOST ?? "0.0.0.0";
 
