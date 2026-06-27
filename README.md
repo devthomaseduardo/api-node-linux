@@ -1,20 +1,3 @@
-Show. Próximo passo: **revisar o README.md em português**, com as rotas reais que já criamos.
-
-No terminal:
-
-```bash
-code .
-```
-
-Abre o arquivo:
-
-```text
-README.md
-```
-
-Substitui o conteúdo por este:
-
-````md
 # API Node.js em Servidor Linux
 
 API REST criada com Node.js, TypeScript, Fastify, Prisma e PostgreSQL.
